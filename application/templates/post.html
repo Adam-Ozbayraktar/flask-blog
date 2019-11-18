@@ -17,6 +17,25 @@
             <p class="article-content">{{ post.content }}</p>
         </div>
     </article>
+    {% for comment in comments %}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.author.image_file) }}" />
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username )}}">{{ comment.author.username }}</a>
+                <small class="text-muted">{{ comment.date_commented.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <p class="article-content">{{ comment.content }}</p>
+        </div>
+    </article>
+    {% endfor %}
+    <!-- {% for comment in comments.items %}
+        <article class="media content-section">
+          <div class="media-body">
+            <p class="article-content">{{ comment.content }}</p>
+          </div>
+        </article>
+    {% endfor %} -->
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
