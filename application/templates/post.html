@@ -21,27 +21,31 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">{{ legend }}</legend>
-                <div class="form-group">
-                    {{ form.content.label(class="form-control-label") }}
-                    {% if form.content.errors %}
-                        {{ form.content(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.content.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.content(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-            </div>
+                <legend class="border-bottom mb-4">All Comments ({{comments.total}})</legend>
+                <!-- <label class=""form-control-label"">hello</label> -->
+                {% if current_user.is_authenticated %}
+                    <div class="form-group">
+                        {% if form.content.errors %}
+                            {{ form.content(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.content(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                {% else %}
+                     <label class="form-control-label">Please <a href="{{url_for('users.login')}}">login</a> or <a href="{{ url_for('users.register')}}">register</a> to leave a comment</label>
+                {% endif %}
         </form>
     </div>
-    {% for comment in comments %}
+    {% for comment in comments.items %}
     <article class="media content-section">
         <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.author.image_file) }}" />
         <div class="media-body">

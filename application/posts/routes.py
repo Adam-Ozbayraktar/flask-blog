@@ -22,6 +22,7 @@ def new_post():
 
 @posts.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
+    page = request.args.get('page', 1, type=int)
     post = Post.query.get_or_404(post_id)
     form = CommentForm()
     if form.validate_on_submit():
@@ -30,7 +31,7 @@ def post(post_id):
         db.session.commit()
         flash('Your comment has been posted', 'success')
         return redirect(url_for('posts.post', post_id=post.id))
-    comments = Comment.query.filter_by(post=post)
+    comments = Comment.query.filter_by(post=post).order_by(Comment.date_commented.desc()).paginate(page=page, per_page=5)
     return render_template('post.html', title=post.title, post=post, comments=comments, form=form, lengend=Comment)
 
 @posts.route("/comment")
