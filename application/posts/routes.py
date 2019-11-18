@@ -20,7 +20,7 @@ def new_post():
     return render_template('create_post.html', title='New Post',
                             form=form, legend='New Post')
 
-@posts.route("/post/<int:post_id>")
+@posts.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     form = CommentForm()
@@ -29,9 +29,9 @@ def post(post_id):
         db.session.add(comment)
         db.session.commit()
         flash('Your comment has been posted', 'success')
-        return redirect(url_for('post', post_id))
+        return redirect(url_for('posts.post', post_id=post.id))
     comments = Comment.query.filter_by(post=post)
-    return render_template('post.html', title=post.title, post=post, comments=comments, form=form)
+    return render_template('post.html', title=post.title, post=post, comments=comments, form=form, lengend=Comment)
 
 @posts.route("/comment")
 def comment():
